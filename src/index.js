@@ -1,5 +1,5 @@
 import express from 'express';
-import { initSchema, pool } from './db.js';
+import { pool } from './db.js';
 import todosRouter from './routes/todos.js';
 
 const app = express();
@@ -25,8 +25,6 @@ app.use((err, _req, res, _next) => {
   console.error(err);
   res.status(500).json({ error: 'Erreur interne du serveur.' });
 });
-
-await initSchema();
 
 const server = app.listen(port, () => {
   console.log(`API démarrée sur le port ${port}`);

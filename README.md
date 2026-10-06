@@ -38,26 +38,7 @@ Les identifiants de la base et le port ont des valeurs par défaut dans `docker-
 | `POSTGRES_DB`       | `todo` | Nom de la base                |
 | `BACKEND_PORT`      | `3000` | Port de l'API sur la machine  |
 
-L'API lit aussi deux variables fournies par les hébergeurs :
-
-| Variable       | Rôle                                                                       |
-| -------------- | -------------------------------------------------------------------------- |
-| `DATABASE_URL` | Adresse complète de la base ; si elle est définie, elle remplace les `PG*` |
-| `PORT`         | Port d'écoute de l'API (3000 par défaut)                                   |
-
-Le script `db/init.sql` crée la table `todos` si elle n'existe pas. Il est exécuté par l'image Postgres au premier démarrage, et par l'API à chaque démarrage : une base vide fournie par un hébergeur est donc initialisée automatiquement.
-
-## Déploiement sur Render
-
-Render ne lit pas `docker-compose.yml` : l'API est construite depuis le `Dockerfile`, et la base est un Postgres géré par Render (le dossier `db/` ne sert qu'en local).
-
-1. **Base de données** — *New > Postgres*, choisir une région (par exemple Frankfurt) et le plan *Free*. Une fois créée, copier son *Internal Database URL*.
-2. **API** — *New > Web Service*, sélectionner ce dépôt. Render détecte le `Dockerfile` (langage *Docker*). Choisir la même région que la base et le plan *Free*, puis ajouter la variable d'environnement `DATABASE_URL` avec l'adresse copiée.
-3. Dans les réglages du service, renseigner `/api/health` comme *Health Check Path*.
-
-L'API est ensuite disponible sur `https://<nom-du-service>.onrender.com/api/todos`. Cette adresse est à fournir au frontend dans sa variable `BACKEND_URL`.
-
-Limites du plan gratuit : le service s'endort après 15 minutes sans trafic (la requête suivante prend environ une minute), et la base gratuite expire 30 jours après sa création.
+Le script `db/init.sql` n'est exécuté qu'au premier démarrage, quand le volume est vide. Après une modification du schéma, il faut recréer le volume avec `docker compose down -v`.
 
 ## API
 
