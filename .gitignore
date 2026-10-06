@@ -1,0 +1,17 @@
+# Dépendances
+node_modules/
+
+# Variables d'environnement (seul .env.example est versionné)
+.env
+.env.*
+!.env.example
+
+# Journaux
+*.log
+npm-debug.log*
+
+# Éditeurs et système
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
