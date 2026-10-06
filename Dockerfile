@@ -8,6 +8,8 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 COPY src ./src
+# Le schéma est aussi appliqué par l'API au démarrage (voir src/db.js)
+COPY db/init.sql ./db/init.sql
 
 USER node
 EXPOSE 3000
