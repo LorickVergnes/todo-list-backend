@@ -9,4 +9,5 @@ README.md
 Dockerfile
 .dockerignore
 docker-compose.yml
-db
+render.yaml
+db/Dockerfile

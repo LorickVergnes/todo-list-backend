@@ -38,7 +38,11 @@ Les identifiants de la base et le port ont des valeurs par défaut dans `docker-
 | `POSTGRES_DB`       | `todo` | Nom de la base                |
 | `BACKEND_PORT`      | `3000` | Port de l'API sur la machine  |
 
-Le script `db/init.sql` n'est exécuté qu'au premier démarrage, quand le volume est vide. Après une modification du schéma, il faut recréer le volume avec `docker compose down -v`.
+Le script `db/init.sql` est exécuté au premier démarrage de la base, quand le volume est vide, puis à chaque démarrage de l'API (il ne crée la table que si elle n'existe pas). Après une modification du schéma, il faut recréer le volume avec `docker compose down -v`.
+
+## Déploiement sur Render
+
+Le fichier `render.yaml` décrit la base PostgreSQL, l'API et le frontend (plan gratuit). Dans Render : **New → Blueprint**, choisir ce dépôt, puis renseigner `BACKEND_URL` avec l'URL publique de l'API (`https://<backend>.onrender.com`, sans slash final).
 
 ## API
 

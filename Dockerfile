@@ -7,6 +7,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 
 COPY src ./src
+COPY db/init.sql ./db/init.sql
 
 USER node
 EXPOSE 3000

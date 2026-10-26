@@ -1,9 +1,13 @@
+import { readFile } from 'node:fs/promises';
 import express from 'express';
 import { pool } from './db.js';
 import todosRouter from './routes/todos.js';
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
+
+// Crée la table si elle n'existe pas encore : une base hébergée (Render) ne passe pas par l'image db/Dockerfile
+await pool.query(await readFile(new URL('../db/init.sql', import.meta.url), 'utf8'));
 
 app.use(express.json());
 

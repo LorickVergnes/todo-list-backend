@@ -1,0 +1,50 @@
+# Blueprint Render : crée la base, l'API et le frontend à partir des deux dépôts GitHub.
+# Chaque push sur main redéploie le service correspondant.
+databases:
+  - name: todo-db
+    plan: free
+    region: frankfurt
+    databaseName: todo
+    user: todo
+
+services:
+  - type: web
+    name: todo-list-backend
+    runtime: docker
+    plan: free
+    region: frankfurt
+    healthCheckPath: /api/health
+    envVars:
+      # Mêmes variables qu'en local : pg les lit directement
+      - key: PGHOST
+        fromDatabase:
+          name: todo-db
+          property: host
+      - key: PGPORT
+        fromDatabase:
+          name: todo-db
+          property: port
+      - key: PGUSER
+        fromDatabase:
+          name: todo-db
+          property: user
+      - key: PGPASSWORD
+        fromDatabase:
+          name: todo-db
+          property: password
+      - key: PGDATABASE
+        fromDatabase:
+          name: todo-db
+          property: database
+
+  - type: web
+    name: todo-list-frontend
+    runtime: docker
+    plan: free
+    region: frankfurt
+    repo: https://github.com/LorickVergnes/todo-list-frontend
+    branch: main
+    envVars:
+      # URL publique de l'API (https://<backend>.onrender.com), demandée à la création du Blueprint
+      - key: BACKEND_URL
+        sync: false
